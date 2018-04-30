@@ -1,4 +1,4 @@
-package pt.haslab.dql.tictactoe.learning;
+package pt.haslab.dql.tictactoe.agents;
 
 import pt.haslab.dql.tictactoe.game.Actions;
 import pt.haslab.dql.tictactoe.game.Board;
@@ -6,6 +6,7 @@ import pt.haslab.dql.tictactoe.game.Board;
 import java.util.Random;
 
 /**
+ * Implements an agent that always plays a random move.
  * Created by nunomachado on 06/08/17.
  */
 public class RandomAgent extends Agent {

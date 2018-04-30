@@ -1,6 +1,5 @@
-package pt.haslab.dql.tictactoe.learning;
+package pt.haslab.dql.tictactoe.agents.learning;
 
-import org.apache.commons.math3.util.Pair;
 import pt.haslab.dql.tictactoe.game.Board;
 import pt.haslab.dql.tictactoe.game.Seed;
 
@@ -25,6 +24,10 @@ public class Memory {
         //compute hash
         computeHash();
 
+    }
+
+    public boolean isDone(){
+        return done;
     }
 
     public void setState(Board newState){

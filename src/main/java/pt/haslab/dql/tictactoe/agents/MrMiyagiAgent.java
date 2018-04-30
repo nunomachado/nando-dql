@@ -1,4 +1,4 @@
-package pt.haslab.dql.tictactoe.learning;
+package pt.haslab.dql.tictactoe.agents;
 
 import pt.haslab.dql.tictactoe.game.Actions;
 import pt.haslab.dql.tictactoe.game.Board;
@@ -8,14 +8,16 @@ import pt.haslab.dql.tictactoe.util.CommonUtils;
 import java.util.Random;
 
 /**
+ * Implements a master agent, dubbed MrMiyagi, which follows a hardcoded
+ * strategy that makes the best move available at each time.
  * Created by nunomachado on 09/08/17.
  * Adapted from https://github.com/rfeinman/tictactoe-reinforcement-learning/blob/master/agent.py
  */
-public class MrMiagiAgent extends Agent {
-    double proLevel; //probability of following the optimal strategy instead of a random one
-    int mySymbol;
+public class MrMiyagiAgent extends Agent {
+    private double proLevel; //probability of following the optimal strategy instead of a random one
+    private int mySymbol;
 
-    public MrMiagiAgent(Seed key, double level)
+    public MrMiyagiAgent(Seed key, double level)
     {
         proLevel = level;
         mySymbol = key == Seed.CROSS ? 1 : -1;

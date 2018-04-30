@@ -38,7 +38,7 @@
                 <configuration>
                     <archive>
                         <manifest>
-                            <mainClass>pt.haslab.dql.tictactoe.game.GameMain</mainClass>
+                            <mainClass>pt.haslab.dql.tictactoe.Main</mainClass>
                         </manifest>
                     </archive>
                 </configuration>
@@ -58,7 +58,7 @@
                 <configuration>
                     <archive>
                         <manifest>
-                            <mainClass>pt.haslab.dql.tictactoe.game.GameMain</mainClass>
+                            <mainClass>pt.haslab.dql.tictactoe.Main</mainClass>
                         </manifest>
                     </archive>
                     <descriptorRefs>

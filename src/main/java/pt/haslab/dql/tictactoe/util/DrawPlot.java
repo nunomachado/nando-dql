@@ -16,6 +16,11 @@ import java.util.ArrayList;
 public class DrawPlot extends ApplicationFrame {
     String title;
 
+    /**
+     * Draws the reward plot with the variation of the reward with the epoch
+     * @param rewardLog
+     * @param seriesTitle
+     */
     public void drawRewardPlot(ArrayList<Integer> rewardLog, String seriesTitle){
         final XYSeries series = new XYSeries(seriesTitle);
         for(int i = 0; i < rewardLog.size(); i++){

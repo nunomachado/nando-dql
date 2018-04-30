@@ -1,20 +1,16 @@
 package pt.haslab.dql.tictactoe.game;
 
-import org.encog.ml.data.MLData;
-import pt.haslab.dql.tictactoe.learning.*;
-import pt.haslab.dql.tictactoe.util.CommonUtils;
-
-import java.util.Scanner;
+import pt.haslab.dql.tictactoe.agents.*;
 
 /**
+ * Tic-Tac-Toe main class. Inspired by:
+ * https://www.ntu.edu.sg/home/ehchua/programming/java/JavaGame_TicTacToe.html
  * Created by nunomachado on 05/08/17.
  */
 public class GameMain {
     public Board board;            // the game board
     public GameState currentState; // the current state of the game (of enum GameState)
     public Seed currentPlayer;     // the current player (of enum Seed)
-
-    private static Scanner in = new Scanner(System.in);  // input Scanner
 
     /** Constructor to setup the game */
     public GameMain() {
@@ -31,6 +27,12 @@ public class GameMain {
         currentState = GameState.PLAYING; // ready to play
     }
 
+    /**
+     * Implements the logic of a tic-tac-toe game
+     * played by two agents
+     * @param aX
+     * @param aO
+     */
     public void playGame(Agent aX, Agent aO) {
         Agent agent;
         boolean validAction = false;
@@ -71,7 +73,7 @@ public class GameMain {
         } while (currentState == GameState.PLAYING);  // repeat until game-over
     }
 
-    /** The player with "theSeed" makes one move, with input validation.
+    /** The player with "theSeed" makes one move with input validation.
      Update Cell's content, Board's currentRow and currentCol. */
     public boolean playerMove(Seed theSeed, int r, int c) {
         int row = r - 1;
@@ -106,32 +108,5 @@ public class GameMain {
         }
         // Otherwise, no change to current state (still GameState.PLAYING).
         return 0;
-    }
-
-    /** The entry main() method */
-    public static void main(String[] args) {
-        int N_GAMES = 10;
-        DQLAgent aX = new DQLAgent("Nando.eg");
-        aX.epsilon = 1;
-        aX.trainAgent(new MrMiagiAgent(Seed.NOUGHT, 1));
-
-        //DQLAgent aX = new DQLAgent("DQLAgentTOP.eg");
-
-
-        for(int i = 0; i < N_GAMES; i++) {
-            GameMain game = new GameMain();  // Let the constructor do the job
-
-            //Agent aX = new MrMiagiAgent(Seed.CROSS,1);
-
-            /*System.out.println("Prediction for an empty board: ");
-            Board b = new Board();
-            b.init();
-            b.paint();
-            MLData prediction = ((DQLAgent) aX).network.compute(b.toMLData());
-            CommonUtils.printPrediction(prediction.getData());*/
-
-            Agent aO = new HumanAgent();
-            game.playGame(aX, aO);
-        }
     }
 }

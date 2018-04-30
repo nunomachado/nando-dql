@@ -8,16 +8,10 @@ import org.encog.ml.data.MLData;
  */
 public class CommonUtils {
 
-    public static void printPrediction(double[][] data){
-        for(int i = 0; i < data.length; i++){
-            System.out.print("[");
-            for(int j = 0; j < data[i].length; j++){
-                    System.out.print(data[i][j]+" ");
-            }
-            System.out.println("]");
-        }
-    }
-
+    /**
+     * Pretty prints the predicted reward given by the neural network
+     * @param data
+     */
     public static void printPrediction(double[] data){
         System.out.print("[");
         for(int i = 0; i < data.length; i++){
@@ -26,6 +20,12 @@ public class CommonUtils {
         System.out.println("]");
     }
 
+    /**
+     * Counts the number of occurrences of an element in an array
+     * @param data
+     * @param key
+     * @return
+     */
     public static int countKey(double[] data, int key){
         int count = 0;
         for(int i = 0; i < data.length; i++){
