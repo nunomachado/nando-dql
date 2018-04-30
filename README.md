@@ -5,9 +5,7 @@ Nando is a pet project with the goal of building a deep Q-learning agent to lear
 Additional info regarding Q-learning can be found in the following references:
 
 [1] https://ai.intel.com/demystifying-deep-reinforcement-learning/
-
 [2] https://rubenfiszel.github.io/posts/rl4j/2016-08-24-Reinforcement-Learning-and-DQN.html
-
 [3] https://leonardoaraujosantos.gitbooks.io/artificial-inteligence/content/deep_q_learning.html
 
 
@@ -41,11 +39,8 @@ $ java -jar target/nando-dql-1.0-SNAPSHOT-jar-with-dependencies.jar train [optio
 Options include:
 
 `-i <path-input-file>` load a neural network previously trained. _(optional)_
-
 `-o <path-output-file>` save the neural network to be trained to a file. _(optional)_
-
 `-p <opponent>` pick the type of agent against which the DQL agent's neural network will be trained. Types of agents include: `human`, `basic`, and `mrmiyagi`. _(required)_
-
 `-r <num-rounds>` duration of the training in number of games played. _(optional, default = 2500)_
 
 Example: `java -jar target/nando-dql-1.0-SNAPSHOT-jar-with-dependencies.jar train -i NandoTest.eg -p basic -r 100` -> loads a previously trained agent from file _NandoTest.eg_ and trains it (i.e. updates its neural network) by playing 100 games against a basic agent.
