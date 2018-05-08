@@ -4,16 +4,16 @@ Nando is a pet project with the goal of building a deep Q-learning agent to lear
 
 Additional info regarding Q-learning can be found in the following references:
 
-[1] https://ai.intel.com/demystifying-deep-reinforcement-learning/
+* https://ai.intel.com/demystifying-deep-reinforcement-learning/
 
-[2] https://rubenfiszel.github.io/posts/rl4j/2016-08-24-Reinforcement-Learning-and-DQN.html
+* https://rubenfiszel.github.io/posts/rl4j/2016-08-24-Reinforcement-Learning-and-DQN.html
 
-[3] https://leonardoaraujosantos.gitbooks.io/artificial-inteligence/content/deep_q_learning.html
+* https://leonardoaraujosantos.gitbooks.io/artificial-inteligence/content/deep_q_learning.html
 
 
 ## Quick Start
 
-Nando has two execution modes: `train` and `play`. In the former mode, a DQL agent is trained against another agent by playing a given number of Tic-Tac-Toe games. At the end of the training, the program outputs a plot depicting the variation of the reward obtained with the increase of the number of games played. In the latter mode, two agents simply play against each other. 
+Nando has two execution modes: `train` and `play`. In the former mode, a DQL agent is trained against another agent by playing a given number of Tic-Tac-Toe games. At the end of the training, the program outputs a plot depicting the variation of the reward obtained with the number of games played. In the latter mode, two agents simply play against each other. 
 
 The types of opponent agents currently supported are:
 - `human`, which represents a human player. This agent receives the next move from the console.
@@ -48,16 +48,12 @@ Options include:
 
 `-r <num-rounds>` duration of the training in number of games played. _(optional, default = 2500)_
 
-Example: `java -jar target/nando-dql-1.0-SNAPSHOT-jar-with-dependencies.jar train -i NandoTest.eg -p basic -r 100` 
-
-Loads a previously trained agent from file _NandoTest.eg_ and trains it (i.e. updates its neural network) by playing 100 games against a basic agent.
+Example: `java -jar target/nando-dql-1.0-SNAPSHOT-jar-with-dependencies.jar train -i NandoTest.eg -p basic -r 100`  (loads the agent from file _NandoTest.eg_ and trains it (i.e. updates its neural network) by playing 100 games against a basic agent)
 
 **2. Play mode:**
 ```bash
 java -jar target/nando-dql-1.0-SNAPSHOT-jar-with-dependencies.jar play agentX agentO -r <num-rounds>
 ```
-Example: `java -jar target/nando-dql-1.0-SNAPSHOT-jar-with-dependencies.jar play NandoTest.eg human -r 5`
-
-A human plays 5 tic-tac-toe games against a Nando DQL agent (stored in file _NandoTest.eg_). 
+Example: `java -jar target/nando-dql-1.0-SNAPSHOT-jar-with-dependencies.jar play NandoTest.eg human -r 5`  (a human plays 5 tic-tac-toe games against a Nando DQL agent (stored in file _NandoTest.eg_)
 
 
