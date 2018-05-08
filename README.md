@@ -29,14 +29,14 @@ Nando is implemented in Java, using the [Encog Machine Learning framework](http:
 ### Compile
 
 ```bash
-$ mvn package
+mvn package
 ```
 
 ### Usage
 
 **1. Training mode:**
 ```bash
-$ java -jar target/nando-dql-1.0-SNAPSHOT-jar-with-dependencies.jar train [options]
+java -jar target/nando-dql-1.0-SNAPSHOT-jar-with-dependencies.jar train [options]
 ```
 Options include:
 
@@ -52,7 +52,7 @@ Example: `java -jar target/nando-dql-1.0-SNAPSHOT-jar-with-dependencies.jar trai
 
 **2. Play mode:**
 ```bash
-$ java -jar target/nando-dql-1.0-SNAPSHOT-jar-with-dependencies.jar play agentX agentO -r <num-rounds>
+java -jar target/nando-dql-1.0-SNAPSHOT-jar-with-dependencies.jar play agentX agentO -r <num-rounds>
 ```
 Example: `java -jar target/nando-dql-1.0-SNAPSHOT-jar-with-dependencies.jar play NandoTest.eg human -r 5` -- human plays 5 tic-tac-toe games against a Nando DQL agent (stored in file _NandoTest.eg_). 
 
