@@ -49,6 +49,7 @@ Options include:
 `-r <num-rounds>` duration of the training in number of games played. _(optional, default = 2500)_
 
 Example: `java -jar target/nando-dql-1.0-SNAPSHOT-jar-with-dependencies.jar train -i NandoTest.eg -p basic -r 100` 
+
 Loads a previously trained agent from file _NandoTest.eg_ and trains it (i.e. updates its neural network) by playing 100 games against a basic agent.
 
 **2. Play mode:**
@@ -56,6 +57,7 @@ Loads a previously trained agent from file _NandoTest.eg_ and trains it (i.e. up
 java -jar target/nando-dql-1.0-SNAPSHOT-jar-with-dependencies.jar play agentX agentO -r <num-rounds>
 ```
 Example: `java -jar target/nando-dql-1.0-SNAPSHOT-jar-with-dependencies.jar play NandoTest.eg human -r 5`
+
 A human plays 5 tic-tac-toe games against a Nando DQL agent (stored in file _NandoTest.eg_). 
 
 
