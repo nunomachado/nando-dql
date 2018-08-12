@@ -33,9 +33,10 @@ public class GameMain {
      * @param aX
      * @param aO
      */
-    public void playGame(Agent aX, Agent aO) {
+    public int playGame(Agent aX, Agent aO) {
         Agent agent;
         boolean validAction = false;
+        int result = 0; // X wins = 1, O wins = -1, Draw = 0
 
         do {
             if(currentPlayer == Seed.CROSS){
@@ -62,8 +63,10 @@ public class GameMain {
             // Print message if game-over
             if (currentState == GameState.CROSS_WON) {
                 System.out.println("'X' won! Bye!");
+                result = 1;
             } else if (currentState == GameState.NOUGHT_WON) {
                 System.out.println("'O' won! Bye!");
+                result = -1;
             } else if (currentState == GameState.DRAW) {
                 System.out.println("It's Draw! Bye!");
             }
@@ -71,6 +74,8 @@ public class GameMain {
             // Switch player
             currentPlayer = (currentPlayer == Seed.CROSS) ? Seed.NOUGHT : Seed.CROSS;
         } while (currentState == GameState.PLAYING);  // repeat until game-over
+
+        return result;
     }
 
     /** The player with "theSeed" makes one move with input validation.
@@ -104,7 +109,7 @@ public class GameMain {
                 return  -1;
         } else if (board.isDraw()) {  // check for draw
             currentState = GameState.DRAW;
-            return 0.5;
+            return 0;
         }
         // Otherwise, no change to current state (still GameState.PLAYING).
         return 0;

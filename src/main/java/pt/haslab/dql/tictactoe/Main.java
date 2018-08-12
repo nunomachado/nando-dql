@@ -4,8 +4,10 @@ import pt.haslab.dql.tictactoe.agents.*;
 import pt.haslab.dql.tictactoe.agents.learning.QLearningConfig;
 import pt.haslab.dql.tictactoe.game.GameMain;
 import pt.haslab.dql.tictactoe.game.Seed;
+import pt.haslab.dql.tictactoe.util.DrawPlot;
 
 import java.io.File;
+import java.util.ArrayList;
 
 public class Main {
 
@@ -60,10 +62,17 @@ public class Main {
                 parseParams(args);
 
                 //start game
+                int totalReward = 0;
+                ArrayList<Integer> rewardLog = new ArrayList<Integer>( ROUNDS );
                 for(int i = 0; i < ROUNDS; i++) {
                     GameMain game = new GameMain();
-                    game.playGame(agentX, agentO);
+                    totalReward += game.playGame(agentX, agentO);
+                    rewardLog.add( totalReward );
                 }
+                DrawPlot plot = new DrawPlot( agentX.toString() + "(X) vs " + agentO.toString() + "(O) for " + ROUNDS + " rounds\n(X win = 1; X loss = -1; draw = 0)" );
+                plot.drawRewardPlot( rewardLog, "Reward for " + agentX.toString() );
+
+
             }
         }
         catch(Exception e){

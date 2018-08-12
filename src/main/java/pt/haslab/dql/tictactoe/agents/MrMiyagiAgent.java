@@ -242,4 +242,11 @@ public class MrMiyagiAgent extends Agent {
             return a;
         return randomMove(board);
     }
+
+
+    @Override
+    public String toString()
+    {
+        return AgentType.MYIAGI.toString();
+    }
 }

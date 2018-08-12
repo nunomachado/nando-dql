@@ -48,4 +48,10 @@ public class BasicAgent extends Agent {
         int a = r.nextInt(Actions.ACTIONS.length);
         return Actions.ACTIONS[a];
     }
+
+    @Override
+    public String toString()
+    {
+        return AgentType.BASIC.toString();
+    }
 }

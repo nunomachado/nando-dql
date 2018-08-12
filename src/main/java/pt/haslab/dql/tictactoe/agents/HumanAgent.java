@@ -24,4 +24,10 @@ public class HumanAgent extends Agent {
 
         return action;
     }
+
+    @Override
+    public String toString()
+    {
+        return AgentType.HUMAN.toString();
+    }
 }

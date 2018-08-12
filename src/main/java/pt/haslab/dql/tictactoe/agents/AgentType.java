@@ -3,6 +3,7 @@ package pt.haslab.dql.tictactoe.agents;
 public enum AgentType {
     HUMAN("human"),
     BASIC("basic"),
+    RANDOM("random"),
     MYIAGI("mrmiyagi");
 
     private final String desc;

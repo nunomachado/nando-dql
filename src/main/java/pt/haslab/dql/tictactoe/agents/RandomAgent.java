@@ -19,4 +19,10 @@ public class RandomAgent extends Agent {
         int a = r.nextInt(Actions.ACTIONS.length);
         return Actions.ACTIONS[a];
     }
+
+    @Override
+    public String toString()
+    {
+        return AgentType.RANDOM.toString();
+    }
 }

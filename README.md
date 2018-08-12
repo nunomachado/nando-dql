@@ -18,7 +18,7 @@ Nando has two execution modes: `train` and `play`. In the former mode, a DQL age
 The types of opponent agents currently supported are:
 - `human`, which represents a human player. This agent receives the next move from the console.
 - `basic`, which implements an agent that attempts to play obvious moves if possible or random ones otherwise.
-- `random` which implements an agent that makes random plays.
+- `random` which implements an agent that makes random moves.
 - `mrmiyagi`, which implements an agent that follows a hardcoded optimal strategy.
 
 Nando DQL agent is implemented with a neural network comprising a 9-neuron input layer followed by a 27-neuron hidden layer (sigmoid activation), a 9-neuron hidden layer (sigmoid activation), and a 9-neuron output layer (linear activation). The 9 neurons of the input and output layers refer to the nine cells of the tic-tac-toe board. 

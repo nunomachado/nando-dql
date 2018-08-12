@@ -30,7 +30,7 @@ public class QLearningConfig {
         epsilon = 0.1;
         epsilon_decay = 0.995;
         epsilon_min = 0.01;
-        learning_rate = 0.001;
+        learning_rate = 0.1;
         batchsize = 128;
     }
 
