@@ -77,12 +77,12 @@ public class Main {
             System.err.println("-i <path-input-file>\tLoad a neural network previously trained. (optional)");
             System.err.println("-o <path-output-file>\tSave the neural network to be trained to a file. (optional)");
             System.err.println("-p <opponent>\t\t\tPick the type of agent against which the DQL agent's neural network will " +
-                    "be trained. Types of agents include: 'human', 'basic', and 'mrmiyagi'. (required)");
+                    "be trained. Types of agents include: 'human', 'basic', 'random', and 'mrmiyagi'. (required)");
             System.err.println("-r <num-rounds>\t\t\tDuration of the training in number of games played. (optional)");
 
             System.err.println("\n-- PLAY MODE --");
             System.err.println("Usage: play agentX agentO -r <num-rounds>");
-            System.err.println("(Types of agents include: 'human', 'basic', and 'mrmiyagi')");
+            System.err.println("Types of agents include: 'human', 'basic', 'random', and 'mrmiyagi' and 'path-to-nando-agent-file'.");
         }
 
 
@@ -113,6 +113,9 @@ public class Main {
         }
         if(parameter.equals(AgentType.HUMAN.toString())){
             return new HumanAgent();
+        }
+        if(parameter.equals(AgentType.RANDOM.toString())){
+            return new RandomAgent();
         }
         if(parameter.equals(AgentType.MYIAGI.toString())){
             return new MrMiyagiAgent(Seed.NOUGHT, 1);
