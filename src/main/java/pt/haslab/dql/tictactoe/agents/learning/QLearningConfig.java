@@ -11,37 +11,37 @@ public class QLearningConfig {
     private double epsilon;
 
     /* we want to decrease the number of explorations as it gets good at playing games */
-    private double epsilon_decay;
+    private double epsilonDecay;
 
     /* we want the agent to explore at least this amount */
-    private double epsilon_min;
+    private double epsilonMin;
 
     /* determines how much the neural net learns in each iteration */
-    private double learning_rate;
+    private double learningRate;
 
     /* the number of memories used during replay */
-    private int batchsize;
+    private int batchSize;
 
     public QLearningConfig()
     {
         //default configuration
         epochs = 2500;
         gamma = 0.95;
-        epsilon = 0.1;
-        epsilon_decay = 0.995;
-        epsilon_min = 0.01;
-        learning_rate = 0.1;
-        batchsize = 128;
+        epsilon = 1;
+        epsilonDecay = 0.995;
+        epsilonMin = 0.01;
+        learningRate = 0.1;
+        batchSize = 128;
     }
 
-    public QLearningConfig(int epochs, double gamma, double epsilon, double epsilon_decay, double epsilon_min, double learning_rate, int batchsize) {
+    public QLearningConfig(int epochs, double gamma, double epsilon, double epsilonDecay, double epsilonMin, double learningRate, int batchSize) {
         this.epochs = epochs;
         this.gamma = gamma;
         this.epsilon = epsilon;
-        this.epsilon_decay = epsilon_decay;
-        this.epsilon_min = epsilon_min;
-        this.learning_rate = learning_rate;
-        this.batchsize = batchsize;
+        this.epsilonDecay = epsilonDecay;
+        this.epsilonMin = epsilonMin;
+        this.learningRate = learningRate;
+        this.batchSize = batchSize;
     }
 
     public int getEpochs() {
@@ -68,35 +68,35 @@ public class QLearningConfig {
         this.epsilon = epsilon;
     }
 
-    public double getEpsilon_decay() {
-        return epsilon_decay;
+    public double getEpsilonDecay() {
+        return epsilonDecay;
     }
 
-    public void setEpsilon_decay(double epsilon_decay) {
-        this.epsilon_decay = epsilon_decay;
+    public void setEpsilonDecay(double epsilonDecay) {
+        this.epsilonDecay = epsilonDecay;
     }
 
-    public double getEpsilon_min() {
-        return epsilon_min;
+    public double getEpsilonMin() {
+        return epsilonMin;
     }
 
-    public void setEpsilon_min(double epsilon_min) {
-        this.epsilon_min = epsilon_min;
+    public void setEpsilonMin(double epsilonMin) {
+        this.epsilonMin = epsilonMin;
     }
 
-    public double getLearning_rate() {
-        return learning_rate;
+    public double getLearningRate() {
+        return learningRate;
     }
 
-    public void setLearning_rate(double learning_rate) {
-        this.learning_rate = learning_rate;
+    public void setLearningRate(double learningRate) {
+        this.learningRate = learningRate;
     }
 
-    public int getBatchsize() {
-        return batchsize;
+    public int getBatchSize() {
+        return batchSize;
     }
 
-    public void setBatchsize(int batchsize) {
-        this.batchsize = batchsize;
+    public void setBatchSize(int batchSize) {
+        this.batchSize = batchSize;
     }
 }

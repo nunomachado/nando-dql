@@ -1,16 +1,22 @@
 package pt.haslab.dql.tictactoe.agents;
 
+import java.io.File;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Random;
 import org.apache.commons.math3.util.Pair;
-import org.encog.engine.network.activation.ActivationLinear;
-import org.encog.engine.network.activation.ActivationSigmoid;
-import org.encog.engine.network.activation.ActivationTANH;
-import org.encog.ml.data.MLData;
-import org.encog.ml.data.MLDataSet;
-import org.encog.ml.data.basic.BasicMLDataSet;
-import org.encog.neural.networks.BasicNetwork;
-import org.encog.neural.networks.layers.BasicLayer;
-import org.encog.neural.networks.training.propagation.resilient.ResilientPropagation;
-import org.encog.persist.EncogDirectoryPersistence;
+import org.deeplearning4j.nn.conf.MultiLayerConfiguration;
+import org.deeplearning4j.nn.conf.NeuralNetConfiguration;
+import org.deeplearning4j.nn.conf.layers.DenseLayer;
+import org.deeplearning4j.nn.conf.layers.OutputLayer;
+import org.deeplearning4j.nn.multilayer.MultiLayerNetwork;
+import org.deeplearning4j.nn.weights.WeightInit;
+import org.deeplearning4j.util.ModelSerializer;
+import org.nd4j.linalg.activations.Activation;
+import org.nd4j.linalg.api.ndarray.INDArray;
+import org.nd4j.linalg.dataset.DataSet;
+import org.nd4j.linalg.learning.config.Sgd;
+import org.nd4j.linalg.lossfunctions.LossFunctions;
 import pt.haslab.dql.tictactoe.agents.learning.Memory;
 import pt.haslab.dql.tictactoe.agents.learning.QLearningConfig;
 import pt.haslab.dql.tictactoe.game.Actions;
@@ -20,12 +26,6 @@ import pt.haslab.dql.tictactoe.game.GameState;
 import pt.haslab.dql.tictactoe.game.Seed;
 import pt.haslab.dql.tictactoe.util.CommonUtils;
 import pt.haslab.dql.tictactoe.util.DrawPlot;
-
-import java.io.File;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Random;
 
 /**
  * Implements a deep Q-learning agent, dubbed Nando.
@@ -39,10 +39,7 @@ public class NandoDQLAgent
     private ArrayList<Memory> memoryList;
 
     /* neural network (NN) */
-    private BasicNetwork network;
-
-    /* backpropagation for trainign the NN*/
-    private ResilientPropagation train;
+    private MultiLayerNetwork network;
 
     /* Deep Q-learning configuration */
     QLearningConfig learnConfig;
@@ -75,14 +72,35 @@ public class NandoDQLAgent
     {
         if ( !loadNNFromFile() )
         {
-            network = new BasicNetwork();
-            network.addLayer( new BasicLayer( null, true, 9 ) );
-            network.addLayer( new BasicLayer( new ActivationTANH(), true, 27 ) );
-            network.addLayer( new BasicLayer( new ActivationTANH(), true, 27 ) );
-            network.addLayer( new BasicLayer( new ActivationTANH(), true, 27 ) );
-            network.addLayer( new BasicLayer( new ActivationSigmoid(), false, 9 ) );
-            network.getStructure().finalizeStructure();
-            network.reset();
+            MultiLayerConfiguration conf = new NeuralNetConfiguration.Builder()
+                    .updater(new Sgd(learnConfig.getLearningRate()))
+                    .activation(Activation.SIGMOID)
+                    .weightInit(WeightInit.XAVIER)
+                    //.l2(0.0001)
+                    .list()
+                    // Input is 9 neurons, representing the board state
+                    .layer(new DenseLayer.Builder()
+                            .nIn(9)
+                            .nOut(27)
+                            .activation(Activation.SIGMOID)
+                            .build())
+                    .layer(new DenseLayer.Builder()
+                            .nIn(27)
+                            .nOut(27)
+                            .activation(Activation.SIGMOID)
+                            .build())
+                    // Output is 9 neurons, each represents the Q-value for an action (i.e. play in a given cell)
+                    .layer(new OutputLayer.Builder(LossFunctions.LossFunction.MSE)
+                            .activation(Activation.SIGMOID)
+                            .nIn(27)
+                            .nOut(9)
+                            .build())
+                    .build();
+
+            network = new MultiLayerNetwork(conf);
+            network.init();
+
+            System.out.println(network.summary());
         }
     }
 
@@ -113,42 +131,41 @@ public class NandoDQLAgent
             //agent acts randomly
             int a = r.nextInt( Actions.ACTIONS.length );
             System.out.println( "(picks randomly)" );
+
             return Actions.ACTIONS[a];
         }
 
         //1) Predict the reward value based on the given state
-        MLData prediction = network.compute( state.toMLData() );
-        double[] rewardPrediction = prediction.getData().clone();
-        Arrays.sort( rewardPrediction ); //sort the rewards in ascending order
+        INDArray rewardPrediction = network.output( state.toINDArray() );
 
         //2) Pick as next move the next available one with highest reward
-        int row = -1;
-        int col = -1;
+        //TODO: pick argmax here from available fields
+        int row;
+        int col;
         int invalidMoves = 0;
-        Pair<Integer, Double> maxReward = null;
+        int maxReward = -1;
         do
         {
+            maxReward = rewardPrediction.argMax().getInt();
+
             if ( invalidMoves > 0 )
             {
-                System.out.println( "(" + Actions.ACTIONS[maxReward.getKey()] + " is invalid)" );
+                System.out.println( "(" + Actions.ACTIONS[maxReward] + " is invalid)" );
+                rewardPrediction.put(0, maxReward, -1000); //TODO: confirm this is a row vector
+                maxReward = rewardPrediction.argMax().getInt();
+
             }
 
-            maxReward = getMaxNthReward( rewardPrediction, invalidMoves );
-            col = maxReward.getKey() % 3;
-            row = ( maxReward.getKey() - col ) / 3;
+            col = maxReward % 3;
+            row = ( maxReward - col ) / 3;
             invalidMoves++;
-
-            //something wrong happened...
-            if ( col == -1 || row == -1 )
-                System.out.println( "WRONG" );
-
         }
         while ( state.cells[row][col].content != Seed.EMPTY );
 
         //Pick the action based on the predicted reward
-        String nextAction = Actions.ACTIONS[maxReward.getKey()];
+        String nextAction = Actions.ACTIONS[maxReward];
         System.out.println( "(picks from NN | " + ( invalidMoves - 1 ) + " invalid tries)" );
-        CommonUtils.printPrediction( prediction.getData() );
+        CommonUtils.printPrediction( rewardPrediction.toDoubleVector() );
 
         return nextAction;
     }
@@ -160,84 +177,55 @@ public class NandoDQLAgent
      * @param prediction
      * @return
      */
-    public Pair<Integer, Double> getMaxReward( MLData prediction )
+    public Pair<Integer, Double> getMaxReward( double[] prediction )
     {
         double maxVal = -1;
         int maxPos = -1;
-        double[] data = prediction.getData().clone();
 
-        for ( int i = 0; i < prediction.size(); i++ )
+        for ( int i = 0; i < prediction.length; i++ )
         {
-            if ( data[i] > maxVal )
+            if ( prediction[i] > maxVal )
             {
-                maxVal = data[i];
+                maxVal = prediction[i];
                 maxPos = i;
             }
         }
         return new Pair<Integer, Double>( maxPos, maxVal );
     }
 
-    /**
-     * Returns the n-th action with highest reward, where n indicates the
-     * number of previous invalid attempts.
-     *
-     * @param data
-     * @param invalidMoves
-     * @return
-     */
-    public Pair<Integer, Double> getMaxNthReward( double[] data, int invalidMoves )
-    {
 
-        double maxVal = -1;
-        int maxPos = -1;
-        //we want the N-th max value from the sorted array
-        //where N is given by the invalid moves so far
-        maxPos = ( data.length - 1 ) - invalidMoves;
-        maxVal = data[maxPos];
-
-        return new Pair<Integer, Double>( maxPos, maxVal );
-    }
-
+    //TODO: this is wrong, we should be obtaining
     public void replay( int batchSize )
     {
         Collections.shuffle( memoryList );
         int size = Math.min( memoryList.size(), batchSize );
-        double target = 0;
+        INDArray oldStateQValues;
+        INDArray newStateQValues;
 
         for ( int i = 0; i < size; i++ )
         {
             Memory m = memoryList.get( i );
 
-            //if done, make our target reward
-            target = m.reward;
+            // Ask the model for the Q values of the old state (inference)
+            oldStateQValues = network.output( m.state.toINDArray() );
 
-            if ( !m.isDone() )
-            {
-                //predict the future discounted reward
-                MLData prediction = network.compute( m.nextState.toMLData() );
-                Pair<Integer, Double> maxReward = getMaxReward( prediction );
-                target = m.reward + learnConfig.getGamma() * maxReward.getValue();
-            }
+            // Ask the model for the Q values of the new state (inference)
+            newStateQValues = network.output( m.nextState.toINDArray() );
 
-            //make the agent to approximately map
-            //the current state to future discounted reward
-            MLData targetFuture = network.compute( m.state.toMLData() );
-            targetFuture.setData( Actions.getActionIndex( m.action ), target );
-            double[][] targetOutput =
-                            { targetFuture.getData() }; //transform targetFuture into double[][] as required by the BasicMLDataSet
+            // Real Q value for the action we took. This is what we will train towards.
+            double targetQ = m.reward + learnConfig.getGamma() * newStateQValues.max().getDouble();
+            oldStateQValues.putScalar(Actions.getActionIndex( m.action ), targetQ);
 
             //Train the Neural Net with the state and targetFuture (with the updated reward value)
-            MLDataSet trainingSet = new BasicMLDataSet( m.state.toTrainingData(), targetOutput );
-            train = new ResilientPropagation( network, trainingSet );
-            train.iteration();
-
+            DataSet trainDataSet = new DataSet(m.state.toINDArray(), oldStateQValues);
+            network.fit(trainDataSet);
         }
 
         //update epsilon (exploration rate)
         double epsilon = learnConfig.getEpsilon();
-        if ( epsilon > learnConfig.getEpsilon_min() )
+        if ( epsilon > learnConfig.getEpsilonMin() )
         {
-            epsilon *= learnConfig.getEpsilon_decay();
+            epsilon *= learnConfig.getEpsilonDecay();
             learnConfig.setEpsilon( epsilon );
         }
     }
@@ -278,8 +266,10 @@ public class NandoDQLAgent
                         a = this.act( game.board );
                         String[] actions = a.split( " " );
                         System.out.println( ">> X in " + a );
-                        validAction = game.playerMove( game.currentPlayer, Integer.valueOf( actions[0] ),
-                                                       Integer.valueOf( actions[1] ) );
+                        validAction = game.playerMove(
+                                game.currentPlayer,
+                                Integer.valueOf( actions[0] ),
+                                Integer.valueOf( actions[1] ) );
                     }
                     while ( !validAction );
 
@@ -376,7 +366,7 @@ public class NandoDQLAgent
             }
             while ( game.currentState == GameState.PLAYING );  // repeat until game-over
 
-            this.replay( learnConfig.getBatchsize() );
+            this.replay( learnConfig.getBatchSize() );
         }
         System.out.println( "TOTAL REWARD " + totalReward );
         DrawPlot plot = new DrawPlot( this.toString() + " vs " + adversary.toString() + " for " + epochs + " rounds" );
@@ -394,8 +384,8 @@ public class NandoDQLAgent
         {
             File file = new File( NNFILE );
             System.out.println( ">> Loading network from " + NNFILE );
-            BasicNetwork nn = (BasicNetwork) EncogDirectoryPersistence.loadObject( file );
-            this.network = nn;
+            this.network = ModelSerializer.restoreMultiLayerNetwork(file);
+
             return true;
         }
         catch ( Exception e )
@@ -417,7 +407,7 @@ public class NandoDQLAgent
         try
         {
             System.out.println( ">> Saving network to " + outfile );
-            EncogDirectoryPersistence.saveObject( new File( outfile ), this.network );
+            ModelSerializer.writeModel(network, new File(outfile), true);
         }
         catch ( Exception e )
         {
@@ -438,7 +428,7 @@ public class NandoDQLAgent
     public static void main( String args[] )
     {
 
-        NandoDQLAgent agent = new NandoDQLAgent( "NandoDQLAgent.eg" );
+        NandoDQLAgent agent = new NandoDQLAgent( "NandoDQLAgent.model" );
 
         //agent.trainAgent(agent2);
         //agent.trainAgent(new MrMiyagiAgent(Seed.NOUGHT, 1));
@@ -446,11 +436,11 @@ public class NandoDQLAgent
         //agent.trainAgent(new RandomAgent());
 
         System.out.println( "Prediction for an empty board: " );
-        Board b = new Board();
-        b.init();
-        b.paint();
-        MLData prediction = agent.network.compute( b.toMLData() );
-        CommonUtils.printPrediction( prediction.getData() );//*/
+        Board board = new Board();
+        board.init();
+        board.paint();
+        double[] prediction = agent.network.output( board.toINDArray() ).toDoubleVector();
+        CommonUtils.printPrediction( prediction );//*/
 
         agent.trainAgent( new HumanAgent() );
 

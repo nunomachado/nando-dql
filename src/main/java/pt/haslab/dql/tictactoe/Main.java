@@ -1,13 +1,19 @@
 package pt.haslab.dql.tictactoe;
 
-import pt.haslab.dql.tictactoe.agents.*;
+import java.io.File;
+import java.util.ArrayList;
+import org.deeplearning4j.exception.DL4JInvalidInputException;
+import pt.haslab.dql.tictactoe.agents.Agent;
+import pt.haslab.dql.tictactoe.agents.AgentType;
+import pt.haslab.dql.tictactoe.agents.BasicAgent;
+import pt.haslab.dql.tictactoe.agents.HumanAgent;
+import pt.haslab.dql.tictactoe.agents.MrMiyagiAgent;
+import pt.haslab.dql.tictactoe.agents.NandoDQLAgent;
+import pt.haslab.dql.tictactoe.agents.RandomAgent;
 import pt.haslab.dql.tictactoe.agents.learning.QLearningConfig;
 import pt.haslab.dql.tictactoe.game.GameMain;
 import pt.haslab.dql.tictactoe.game.Seed;
 import pt.haslab.dql.tictactoe.util.DrawPlot;
-
-import java.io.File;
-import java.util.ArrayList;
 
 public class Main {
 
@@ -17,11 +23,8 @@ public class Main {
 
     //variables for training mode
     public static String inputFile = null;  //load trained agent from file
-    public static String outputFile = null; //save trained agent to file
+    public static String outputFile = "NandoDQL.model"; //save trained agent to file
 
-
-
-    /** The entry main() method */
     public static void main(String[] args) {
         String mode = args[0];
 
@@ -75,7 +78,11 @@ public class Main {
 
             }
         }
+        catch (DL4JInvalidInputException dle) {
+            dle.printStackTrace();
+        }
         catch(Exception e){
+            e.printStackTrace();
             System.err.print("Wrong input: ");
             for(String s : args){
                 System.err.print(s+" ");
@@ -93,8 +100,6 @@ public class Main {
             System.err.println("Usage: play agentX agentO -r <num-rounds>");
             System.err.println("Types of agents include: 'human', 'basic', 'random', and 'mrmiyagi' and 'path-to-nando-agent-file'.");
         }
-
-
     }
 
     public static void parseParams(String args[]){
@@ -117,16 +122,16 @@ public class Main {
     }
 
     public static Agent parseAgent(String parameter){
-        if(parameter.equals(AgentType.BASIC.toString())){
+        if(parameter.equalsIgnoreCase(AgentType.BASIC.name())){
             return new BasicAgent();
         }
-        if(parameter.equals(AgentType.HUMAN.toString())){
+        if(parameter.equalsIgnoreCase(AgentType.HUMAN.name())){
             return new HumanAgent();
         }
-        if(parameter.equals(AgentType.RANDOM.toString())){
+        if(parameter.equalsIgnoreCase(AgentType.RANDOM.name())){
             return new RandomAgent();
         }
-        if(parameter.equals(AgentType.MYIAGI.toString())){
+        if(parameter.equalsIgnoreCase(AgentType.MRMYIAGI.name())){
             return new MrMiyagiAgent(Seed.NOUGHT, 1);
         }
         else{

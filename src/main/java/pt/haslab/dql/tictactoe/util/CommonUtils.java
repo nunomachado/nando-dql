@@ -1,8 +1,6 @@
 package pt.haslab.dql.tictactoe.util;
 
 import org.apache.commons.math3.util.Pair;
-import org.encog.ml.data.MLData;
-
 /**
  * Created by nunomachado on 08/08/17.
  */
@@ -15,7 +13,7 @@ public class CommonUtils {
     public static void printPrediction(double[] data){
         System.out.print("[");
         for(int i = 0; i < data.length; i++){
-                System.out.print(data[i]+" ");
+                System.out.print(data[i]+" "); //TODO: format this with 2 decimal digits
         }
         System.out.println("]");
     }

@@ -47,7 +47,7 @@ public class Memory {
     private void computeHash(){
         String str = action;
         for(int i = 0; i < state.ROWS; i++) {
-            for (int j = 0; j < state.COLS; j++) {
+            for (int j = 0; j < state.COLUMNS; j++) {
                 switch (nextState.cells[i][j].content) {
                     case CROSS: str += "1"; break;
                     case EMPTY: str += "0"; break;

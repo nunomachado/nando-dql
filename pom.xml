@@ -8,23 +8,36 @@
     <artifactId>nando-dql</artifactId>
     <version>1.0-SNAPSHOT</version>
 
+    <properties>
+        <dl4j.version>1.0.0-beta4</dl4j.version>
+        <math3.version>3.4.1</math3.version>
+        <jfreechart.version>1.0.19</jfreechart.version>
+        <jar.finalName>nandoDQL</jar.finalName>
+    </properties>
+
     <dependencies>
         <dependency>
-            <groupId>org.encog</groupId>
-            <artifactId>encog-core</artifactId>
-            <version>3.3.0</version>
+            <groupId>org.nd4j</groupId>
+            <artifactId>nd4j-native-platform</artifactId>
+            <version>${dl4j.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.deeplearning4j</groupId>
+            <artifactId>deeplearning4j-core</artifactId>
+            <version>${dl4j.version}</version>
         </dependency>
 
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-math3</artifactId>
-            <version>3.4.1</version>
+            <version>${math3.version}</version>
         </dependency>
 
         <dependency>
             <groupId>org.jfree</groupId>
             <artifactId>jfreechart</artifactId>
-            <version>1.0.19</version>
+            <version>${jfreechart.version}</version>
         </dependency>
 
     </dependencies>
@@ -56,6 +69,7 @@
                     </execution>
                 </executions>
                 <configuration>
+                    <finalName>nandoDQL</finalName>
                     <archive>
                         <manifest>
                             <mainClass>pt.haslab.dql.tictactoe.Main</mainClass>

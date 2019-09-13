@@ -1,11 +1,10 @@
 package pt.haslab.dql.tictactoe.agents;
 
+import java.util.Random;
 import pt.haslab.dql.tictactoe.game.Actions;
 import pt.haslab.dql.tictactoe.game.Board;
 import pt.haslab.dql.tictactoe.game.Seed;
 import pt.haslab.dql.tictactoe.util.CommonUtils;
-
-import java.util.Random;
 
 /**
  * Implements a master agent, dubbed MrMiyagi, which follows a hardcoded
@@ -247,6 +246,6 @@ public class MrMiyagiAgent extends Agent {
     @Override
     public String toString()
     {
-        return AgentType.MYIAGI.toString();
+        return AgentType.MRMYIAGI.toString();
     }
 }

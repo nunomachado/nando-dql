@@ -105,5 +105,6 @@ fabric.properties
 ### User stuff
 target/
 *.eg
+NandoDQL.model
 
 # End of https://www.gitignore.io/api/intellij

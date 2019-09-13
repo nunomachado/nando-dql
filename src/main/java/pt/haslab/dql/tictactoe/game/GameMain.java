@@ -1,6 +1,6 @@
 package pt.haslab.dql.tictactoe.game;
 
-import pt.haslab.dql.tictactoe.agents.*;
+import pt.haslab.dql.tictactoe.agents.Agent;
 
 /**
  * Tic-Tac-Toe main class. Inspired by:
@@ -79,15 +79,15 @@ public class GameMain {
     }
 
     /** The player with "theSeed" makes one move with input validation.
-     Update Cell's content, Board's currentRow and currentCol. */
+     Update Cell's content, Board's currentRow and currentColumn. */
     public boolean playerMove(Seed theSeed, int r, int c) {
         int row = r - 1;
         int col = c - 1;
-        if (row >= 0 && row < Board.ROWS && col >= 0 && col < Board.COLS
+        if (row >= 0 && row < Board.ROWS && col >= 0 && col < Board.COLUMNS
                 && board.cells[row][col].content == Seed.EMPTY) {
             board.cells[row][col].content = theSeed;
             board.currentRow = row;
-            board.currentCol = col;
+            board.currentColumn = col;
             return true; // input okay, exit loop
         } else {
             System.out.println("This move at (" + (row + 1) + "," + (col + 1)

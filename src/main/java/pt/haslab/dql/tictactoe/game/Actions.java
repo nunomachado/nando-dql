@@ -1,7 +1,5 @@
 package pt.haslab.dql.tictactoe.game;
 
-import org.apache.commons.math3.util.Pair;
-
 /**
  * Created by nunomachado on 05/08/17.
  */
@@ -15,13 +13,16 @@ public class Actions {
             "2 3",      //5
             "3 1",      //6
             "3 2",      //7
-            "3 3"};     //8
+            "3 3"       //8
+    };
 
-    public static int getActionIndex(String action){
-        for(int i = 0; i < ACTIONS.length; i++){
-            if(ACTIONS[i] == action)
+    public static int getActionIndex(String action) {
+        for (int i = 0; i < ACTIONS.length; i++) {
+            if (ACTIONS[i].equals(action)) {
                 return i;
+            }
         }
+
         return -1; //action does not exist
     }
 }
