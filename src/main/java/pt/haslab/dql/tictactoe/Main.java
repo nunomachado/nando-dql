@@ -2,7 +2,6 @@ package pt.haslab.dql.tictactoe;
 
 import java.io.File;
 import java.util.ArrayList;
-import org.deeplearning4j.exception.DL4JInvalidInputException;
 import pt.haslab.dql.tictactoe.agents.Agent;
 import pt.haslab.dql.tictactoe.agents.AgentType;
 import pt.haslab.dql.tictactoe.agents.BasicAgent;
@@ -39,7 +38,7 @@ public class Main {
                 agentX = new NandoDQLAgent(trainConfig, inputFile);
 
                 //check that the type of agent is valid
-                if(agentO == null){
+                if (agentO == null) {
                     throw new Exception();
                 }
 
@@ -66,26 +65,22 @@ public class Main {
 
                 //start game
                 int totalReward = 0;
-                ArrayList<Integer> rewardLog = new ArrayList<Integer>( ROUNDS );
-                for(int i = 0; i < ROUNDS; i++) {
+                ArrayList<Integer> rewardLog = new ArrayList<Integer>(ROUNDS);
+                for (int i = 0; i < ROUNDS; i++) {
                     GameMain game = new GameMain();
                     totalReward += game.playGame(agentX, agentO);
-                    rewardLog.add( totalReward );
+                    rewardLog.add(totalReward);
                 }
-                DrawPlot plot = new DrawPlot( agentX.toString() + "(X) vs " + agentO.toString() + "(O) for " + ROUNDS + " rounds\n(X win = 1; X loss = -1; draw = 0)" );
-                plot.drawRewardPlot( rewardLog, "Reward for " + agentX.toString() );
+                DrawPlot plot = new DrawPlot(agentX.toString() + "(X) vs " + agentO.toString() + "(O) for " + ROUNDS + " rounds\n(X win = 1; X loss = -1; draw = 0)");
+                plot.drawRewardPlot(rewardLog, "Reward for " + agentX.toString());
 
 
             }
-        }
-        catch (DL4JInvalidInputException dle) {
-            dle.printStackTrace();
-        }
-        catch(Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
             System.err.print("Wrong input: ");
-            for(String s : args){
-                System.err.print(s+" ");
+            for (String s : args) {
+                System.err.print(s + " ");
             }
             System.err.println("\n\n-- DQL AGENT TRAINING MODE --");
             System.err.println("Usage: train [options]");
@@ -102,53 +97,49 @@ public class Main {
         }
     }
 
-    public static void parseParams(String args[]){
-        for(int i = 1; i < args.length; i++){
+    public static void parseParams(String args[]) {
+        for (int i = 1; i < args.length; i++) {
             String param = args[i];
             String nextParam = args[++i];
-            if(param.equals("-i")){ //load a previous DQL agent
+            if (param.equals("-i")) { //load a previous DQL agent
                 inputFile = nextParam;
-            }
-            else if(param.equals("-o")){ //set file to store agent after training
+            } else if (param.equals("-o")) { //set file to store agent after training
                 outputFile = nextParam;
-            }
-            else if(param.equals("-p")){ //read opponent player
+            } else if (param.equals("-p")) { //read opponent player
                 agentO = parseAgent(nextParam);
-            }
-            else if(param.equals("-r")){ //number of rounds/games
+            } else if (param.equals("-r")) { //number of rounds/games
                 ROUNDS = Integer.valueOf(nextParam);
             }
         }
     }
 
-    public static Agent parseAgent(String parameter){
-        if(parameter.equalsIgnoreCase(AgentType.BASIC.name())){
+    public static Agent parseAgent(String parameter) {
+        if (parameter.equalsIgnoreCase(AgentType.BASIC.name())) {
             return new BasicAgent();
         }
-        if(parameter.equalsIgnoreCase(AgentType.HUMAN.name())){
+        if (parameter.equalsIgnoreCase(AgentType.HUMAN.name())) {
             return new HumanAgent();
         }
-        if(parameter.equalsIgnoreCase(AgentType.RANDOM.name())){
+        if (parameter.equalsIgnoreCase(AgentType.RANDOM.name())) {
             return new RandomAgent();
         }
-        if(parameter.equalsIgnoreCase(AgentType.MRMYIAGI.name())){
+        if (parameter.equalsIgnoreCase(AgentType.MRMYIAGI.name())) {
             return new MrMiyagiAgent(Seed.NOUGHT, 1);
-        }
-        else{
+        } else {
             File file = new File(parameter);
-            if(file.exists()){
+            if (file.exists()) {
                 return new NandoDQLAgent(parameter);
             }
         }
         return null;
     }
 
-    public static void printInput(){
-        System.out.println("ROUNDS: "+ROUNDS);
-        if(inputFile!=null)
-            System.out.println("INPUT FILE: "+inputFile);
-        if(outputFile!=null)
-            System.out.println("OUTPUT FILE: "+outputFile);
+    public static void printInput() {
+        System.out.println("ROUNDS: " + ROUNDS);
+        if (inputFile != null)
+            System.out.println("INPUT FILE: " + inputFile);
+        if (outputFile != null)
+            System.out.println("OUTPUT FILE: " + outputFile);
 
     }
 }

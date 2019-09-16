@@ -4,7 +4,6 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Random;
-import org.apache.commons.math3.util.Pair;
 import org.deeplearning4j.nn.conf.MultiLayerConfiguration;
 import org.deeplearning4j.nn.conf.NeuralNetConfiguration;
 import org.deeplearning4j.nn.conf.layers.DenseLayer;
@@ -89,6 +88,11 @@ public class NandoDQLAgent
                             .nOut(27)
                             .activation(Activation.SIGMOID)
                             .build())
+                    .layer(new DenseLayer.Builder()
+                            .nIn(27)
+                            .nOut(27)
+                            .activation(Activation.SIGMOID)
+                            .build())
                     // Output is 9 neurons, each represents the Q-value for an action (i.e. play in a given cell)
                     .layer(new OutputLayer.Builder(LossFunctions.LossFunction.MSE)
                             .activation(Activation.SIGMOID)
@@ -139,11 +143,9 @@ public class NandoDQLAgent
         INDArray rewardPrediction = network.output( state.toINDArray() );
 
         //2) Pick as next move the next available one with highest reward
-        //TODO: pick argmax here from available fields
-        int row;
-        int col;
+        int row, col, maxReward
+                ;
         int invalidMoves = 0;
-        int maxReward = -1;
         do
         {
             maxReward = rewardPrediction.argMax().getInt();
@@ -151,7 +153,7 @@ public class NandoDQLAgent
             if ( invalidMoves > 0 )
             {
                 System.out.println( "(" + Actions.ACTIONS[maxReward] + " is invalid)" );
-                rewardPrediction.put(0, maxReward, -1000); //TODO: confirm this is a row vector
+                rewardPrediction.put(0, maxReward, -1000);
                 maxReward = rewardPrediction.argMax().getInt();
 
             }
@@ -170,31 +172,7 @@ public class NandoDQLAgent
         return nextAction;
     }
 
-    /**
-     * Return the maximum reward (expressed as a pair with the action and its reward)
-     * for a given prediction given by the NN
-     *
-     * @param prediction
-     * @return
-     */
-    public Pair<Integer, Double> getMaxReward( double[] prediction )
-    {
-        double maxVal = -1;
-        int maxPos = -1;
 
-        for ( int i = 0; i < prediction.length; i++ )
-        {
-            if ( prediction[i] > maxVal )
-            {
-                maxVal = prediction[i];
-                maxPos = i;
-            }
-        }
-        return new Pair<Integer, Double>( maxPos, maxVal );
-    }
-
-
-    //TODO: this is wrong, we should be obtaining
     public void replay( int batchSize )
     {
         Collections.shuffle( memoryList );

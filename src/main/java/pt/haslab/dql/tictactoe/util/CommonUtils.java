@@ -1,5 +1,7 @@
 package pt.haslab.dql.tictactoe.util;
 
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import org.apache.commons.math3.util.Pair;
 /**
  * Created by nunomachado on 08/08/17.
@@ -11,9 +13,10 @@ public class CommonUtils {
      * @param data
      */
     public static void printPrediction(double[] data){
+        NumberFormat formatter = new DecimalFormat("#0.00");
         System.out.print("[");
         for(int i = 0; i < data.length; i++){
-                System.out.print(data[i]+" "); //TODO: format this with 2 decimal digits
+            System.out.println(formatter.format(data[i]) + " ");
         }
         System.out.println("]");
     }

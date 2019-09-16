@@ -2,14 +2,13 @@
 
 Nando is a pet project with the goal of building a deep Q-learning agent to learn how to play Tic-Tac-Toe. In a nutshell, Q-learning is a reinforcement learning technique that aims at inferring a reward function _Q(s,a)_ (where _s_ is a state and _a_ a possible next action) by increasing experience. Having an accurate reward function _Q_, one can then build an agent that employs the optimal strategy in an environment (i.e. for a given state, the agent picks as next action the one that maximizes the future reward). Deep Q-learning thus consists of approximating _Q_ by means of a neural network.
 
-Additional info regarding Q-learning can be found in the following references:
-
-* https://ai.intel.com/demystifying-deep-reinforcement-learning/
+Additional info regarding (deep) Q-learning can be found in the following references:
 
 * https://rubenfiszel.github.io/posts/rl4j/2016-08-24-Reinforcement-Learning-and-DQN.html
 
 * https://leonardoaraujosantos.gitbooks.io/artificial-inteligence/content/deep_q_learning.html
 
+* https://blog.valohai.com/reinforcement-learning-tutorial-basic-deep-q-learning
 
 ## Quick Start
 
@@ -21,9 +20,9 @@ The types of opponent agents currently supported are:
 - `random` which implements an agent that makes random moves.
 - `mrmiyagi`, which implements an agent that follows a hardcoded optimal strategy.
 
-Nando DQL agent is implemented with a neural network comprising a 9-neuron input layer followed by a 27-neuron hidden layer (sigmoid activation), a 9-neuron hidden layer (sigmoid activation), and a 9-neuron output layer (linear activation). The 9 neurons of the input and output layers refer to the nine cells of the tic-tac-toe board. 
+Nando DQL agent is implemented with a neural network comprising a 9-neuron input layer followed by two 27-neuron hidden layers (sigmoid activation), and a 9-neuron output layer (sigmoid activation). The 9 neurons of the input layer represent the current board state, where values 1, 0, and -1 respectively indicate a cross, empty, and nought. In turn, the 9 neurons of the output layer give the Q-value of each action   
 
-Nando is implemented in Java, using the [Encog Machine Learning framework](http://www.heatonresearch.com/encog/).
+Nando is implemented in Java using [DL4J](https://deeplearning4j.org).
 
 
 
@@ -49,12 +48,20 @@ Options include:
 
 `-r <num-rounds>` duration of the training in number of games played. _(optional, default = 2500)_
 
-Example: `java -jar target/nando-dql-1.0-SNAPSHOT-jar-with-dependencies.jar train -i NandoTest.eg -p basic -r 100`  (loads a Nando DQL agent from file _NandoTest.eg_ and trains it (i.e. updates its neural network) by playing 100 games against a basic agent)
+Example: 
+    
+    java -jar target/nando-dql-1.0-SNAPSHOT-jar-with-dependencies.jar train -p basic -r 100 -o NandoTest.model  
+
+The command above trains a Nando agent by playing 100 games against a basic agent and outputs the resulting neural network to file NandoTest.model.
 
 **2. Play mode:**
-```bash
-java -jar target/nando-dql-1.0-SNAPSHOT-jar-with-dependencies.jar play agentX agentO -r <num-rounds>
-```
-Example: `java -jar target/nando-dql-1.0-SNAPSHOT-jar-with-dependencies.jar play NandoTest.eg human -r 5`  (allow a human to play 5 tic-tac-toe games against the Nando DQL agent stored in file _NandoTest.eg_)
 
+To play a game between two agents use the command: 
 
+    java -jar target/nando-dql-1.0-SNAPSHOT-jar-with-dependencies.jar play agentX agentO -r <num-rounds>
+
+For instance, for you to play 5 games against the Nando DQL agent stored in file _NandoTest.model_, run the following:
+
+    java -jar target/nando-dql-1.0-SNAPSHOT-jar-with-dependencies.jar play NandoTest.model human -r 5
+
+Note that, in the example above, you will play as nought (O) and the Nando agent as cross (X). 
