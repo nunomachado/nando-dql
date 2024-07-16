@@ -1,2 +1,5 @@
-tensorflow==2.16.0
+torch
 matplotlib
+flake8
+black
+isort
