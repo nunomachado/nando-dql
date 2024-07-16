@@ -20,41 +20,66 @@ The types of opponent agents currently supported are:
 - `basic`, which implements an agent that attempts to play obvious moves if possible or random ones otherwise.
 - `random` which implements an agent that makes random moves.
 - `mrmiyagi`, which implements an agent that follows a hardcoded optimal strategy.
+- `<path-to-nando-model.pth>`, which loads a NandoDQL trained model from a file (`play` mode only).
 
 Nando DQL agent is implemented with a neural network comprising a 9-neuron input layer followed by a 27-neuron hidden layer (sigmoid activation), a 9-neuron hidden layer (sigmoid activation), and a 9-neuron output layer (linear activation). The 9 neurons of the input and output layers refer to the nine cells of the tic-tac-toe board. 
 
-Nando is implemented in Java, using the [Encog Machine Learning framework](http://www.heatonresearch.com/encog/).
+Nando is implemented in Python, using Pytorch.
 
 
+### Setup
 
-### Compile
-
+1. Create a virtual environment:
 ```bash
-mvn package
+python -m venv venv
 ```
 
-### Usage
+2. Activate the virtual environment:
+```bash
+source venv/bin/activate
+```
+
+3. Install the required dependencies:
+```bash
+pip install -r requirements.txt
+```
+
+## Usage
 
 **1. Training mode:**
+
 ```bash
-java -jar target/nando-dql-1.0-SNAPSHOT-jar-with-dependencies.jar train [options]
+python tictactoe/main.py train [options]
 ```
+
 Options include:
 
-`-i <path-input-file>` load a neural network previously trained. _(optional)_
+-o <path-output-file> save the neural network to be trained to a file. (optional)
 
-`-o <path-output-file>` save the neural network to be trained to a file. _(optional)_
+-p <opponent> pick the type of agent against which the DQL agent's neural network will be trained. Types of agents include: human, basic, random, and mrmiyagi. (required)
 
-`-p <opponent>` pick the type of agent against which the DQL agent's neural network will be trained. Types of agents include: `human`, `basic`, `random`, and `mrmiyagi`. _(required)_
+-g <num-games> duration of the training in number of games played. (optional, default = 2500)
 
-`-r <num-rounds>` duration of the training in number of games played. _(optional, default = 2500)_
-
-Example: `java -jar target/nando-dql-1.0-SNAPSHOT-jar-with-dependencies.jar train -i NandoTest.eg -p basic -r 100`  (loads a Nando DQL agent from file _NandoTest.eg_ and trains it (i.e. updates its neural network) by playing 100 games against a basic agent)
+Example: `python tictactoe/main.py train -p basic -g 100` (trains a Nando DQL agent by playing 100 games against a basic agent)
 
 **2. Play mode:**
+
 ```bash
-java -jar target/nando-dql-1.0-SNAPSHOT-jar-with-dependencies.jar play agentX agentO -r <num-rounds>
+python tictactoe/main.py play <player-X> <player-O> -g <num-games>
 ```
-Example: `java -jar target/nando-dql-1.0-SNAPSHOT-jar-with-dependencies.jar play NandoTest.eg human -r 5`  (allow a human to play 5 tic-tac-toe games against the Nando DQL agent stored in file _NandoTest.eg_)
+Example: `python tictactoe/main.py play models/nando_dql_agent.pth human -r 5 (allow a human to play 5 tic-tac-toe games against the Nando DQL agent stored in file 'models/nando_dql_agent.pth')`
 
+## Development
 
+The project uses [black](https://github.com/psf/black), [isort](https://github.com/timothycrosley/isort) and [flake8](https://flake8.pycqa.org/en/latest/) for linting and formatting. You can run these tools with the following commands:
+
+```bash
+# Check for formatting issues
+black .
+
+# Check for import order issues
+isort .
+
+# Check for linting issues
+flake8 .
+```
