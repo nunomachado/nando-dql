@@ -15,4 +15,3 @@ class Moves:
         if move not in Moves.MOVES:
             raise ValueError(f"Invalid move: {move}")
         return tuple(map(int, move.split()))
-    

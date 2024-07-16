@@ -1,7 +1,9 @@
 import random
+
 from tictactoe.agents.agent import Agent
-from tictactoe.game.moves import Moves
 from tictactoe.game.board import Board, Seed
+from tictactoe.game.moves import Moves
+
 
 class MrMiyagiAgent(Agent):
     """
@@ -49,7 +51,9 @@ class MrMiyagiAgent(Agent):
         for i, j in [(1, 1), (0, 0), (0, 2), (2, 0), (2, 2)]:
             if board[i][j] == 0:
                 board[i][j] = symbol
-                moves = sum((self.find_move(board, symbol) is not None for _ in range(4)))
+                moves = sum(
+                    (self.find_move(board, symbol) is not None for _ in range(4))
+                )
                 board[i][j] = 0
                 if moves >= 2:
                     return Moves.MOVES[i * 3 + j]
@@ -88,7 +92,15 @@ class MrMiyagiAgent(Agent):
         board = state.to_matrix()
         if random.random() > self.pro_level:
             return self.random_move(board)
-        strategies = [self.win, self.block_win, self.fork, self.block_fork, self.center, self.corner, self.side_empty]
+        strategies = [
+            self.win,
+            self.block_win,
+            self.fork,
+            self.block_fork,
+            self.center,
+            self.corner,
+            self.side_empty,
+        ]
         for strategy in strategies:
             action = strategy(board)
             if action:
@@ -97,4 +109,4 @@ class MrMiyagiAgent(Agent):
             return self.random_move(board)
 
     def __str__(self):
-        return 'MIYAGI'
+        return "MIYAGI"

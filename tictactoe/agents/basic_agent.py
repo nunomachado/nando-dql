@@ -1,7 +1,9 @@
 import random
+
 from tictactoe.agents.agent import Agent
-from tictactoe.game.moves import Moves
 from tictactoe.game.board import Board, Seed
+from tictactoe.game.moves import Moves
+
 
 class BasicAgent(Agent):
 
@@ -27,4 +29,4 @@ class BasicAgent(Agent):
         return random.choice(Moves.MOVES)
 
     def __str__(self):
-        return 'BASIC'
+        return "BASIC"
