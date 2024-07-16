@@ -20,6 +20,7 @@ The types of opponent agents currently supported are:
 - `basic`, which implements an agent that attempts to play obvious moves if possible or random ones otherwise.
 - `random` which implements an agent that makes random moves.
 - `mrmiyagi`, which implements an agent that follows a hardcoded optimal strategy.
+- `<path-to-nando-model.pth>`, which loads a NandoDQL trained model from a file (`play` mode only).
 
 Nando DQL agent is implemented with a neural network comprising a 9-neuron input layer followed by a 27-neuron hidden layer (sigmoid activation), a 9-neuron hidden layer (sigmoid activation), and a 9-neuron output layer (linear activation). The 9 neurons of the input and output layers refer to the nine cells of the tic-tac-toe board. 
 
@@ -45,7 +46,8 @@ pip install -r requirements.txt
 
 ## Usage
 
-1. Training mode:
+**1. Training mode:**
+
 ```bash
 python tictactoe/main.py train [options]
 ```
@@ -58,7 +60,14 @@ Options include:
 
 -g <num-games> duration of the training in number of games played. (optional, default = 2500)
 
-Example: python tictactoe/main.py train -p basic -g 100 (trains a Nando DQL agent by playing 100 games against a basic agent)
+Example: `python tictactoe/main.py train -p basic -g 100` (trains a Nando DQL agent by playing 100 games against a basic agent)
+
+**2. Play mode:**
+
+```bash
+python tictactoe/main.py play <player-X> <player-O> -g <num-games>
+```
+Example: `python tictactoe/main.py play models/nando_dql_agent.pth human -r 5 (allow a human to play 5 tic-tac-toe games against the Nando DQL agent stored in file 'models/nando_dql_agent.pth')`
 
 ## Development
 
