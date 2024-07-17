@@ -39,11 +39,11 @@ The types of opponent agents currently supported are:
 - `mrmiyagi`, which implements an agent that follows a hardcoded optimal strategy.
 - `<path-to-nando-model.pth>`, which loads a NandoDQL trained model from a file (`play` mode only).
 
-Nando DQL agent is implemented with a neural network comprising a 9-neuron input layer (linear activation) followed by a 18-neuron hidden layer (ReLu activation), and a 9-neuron output layer (linear activation). The 9 neurons of the input and output layers represent, respectively, the state of the nine cells of the tic-tac-toe board, and the nine possible actions a player can take. 
+Nando DQL agent is implemented with neural network comprising a 9-neuron input layer, followed by an 18-neuron hidden layer with ReLU activation, and a 9-neuron output layer with linear activation. The 9 neurons of the input and output layers represent, respectively, the state of the nine cells of the tic-tac-toe board, and the nine possible actions a player can take.
 
 Nando is implemented in Python, using PyTorch.
 
-**1. Training mode:**
+### Train Mode
 
 ```bash
 python tictactoe/main.py train [options]
@@ -59,7 +59,7 @@ Options include:
 
 Example: `python tictactoe/main.py train -p basic -g 100` (trains a Nando DQL agent by playing 100 games against a basic agent)
 
-**2. Play mode:**
+### Play Mode
 
 ```bash
 python tictactoe/main.py play <player-X> <player-O> -g <num-games>
