@@ -11,23 +11,7 @@ Additional info regarding Q-learning can be found in the following references:
 * https://leonardoaraujosantos.gitbooks.io/artificial-inteligence/content/deep_q_learning.html
 
 
-## Quick Start
-
-Nando has two execution modes: `train` and `play`. In the former mode, a DQL agent is trained against another agent by playing a given number of Tic-Tac-Toe games. At the end of the training, the program outputs a plot depicting the variation of the reward obtained with the number of games played. In the latter mode, two agents simply play against each other. 
-
-The types of opponent agents currently supported are:
-- `human`, which represents a human player. This agent receives the next move from the console.
-- `basic`, which implements an agent that attempts to play obvious moves if possible or random ones otherwise.
-- `random` which implements an agent that makes random moves.
-- `mrmiyagi`, which implements an agent that follows a hardcoded optimal strategy.
-- `<path-to-nando-model.pth>`, which loads a NandoDQL trained model from a file (`play` mode only).
-
-Nando DQL agent is implemented with a neural network comprising a 9-neuron input layer followed by a 27-neuron hidden layer (sigmoid activation), a 9-neuron hidden layer (sigmoid activation), and a 9-neuron output layer (linear activation). The 9 neurons of the input and output layers refer to the nine cells of the tic-tac-toe board. 
-
-Nando is implemented in Python, using Pytorch.
-
-
-### Setup
+## Setup
 
 1. Create a virtual environment:
 ```bash
@@ -45,6 +29,19 @@ pip install -r requirements.txt
 ```
 
 ## Usage
+
+Nando has two execution modes: `train` and `play`. In the former mode, a DQL agent is trained against another agent by playing a given number of Tic-Tac-Toe games. At the end of the training, the program outputs a plot depicting the variation of the reward obtained with the number of games played. In the latter mode, two agents simply play against each other. 
+
+The types of opponent agents currently supported are:
+- `human`, which represents a human player. This agent receives the next move from the console.
+- `basic`, which implements an agent that attempts to play obvious moves if possible or random ones otherwise.
+- `random` which implements an agent that makes random moves.
+- `mrmiyagi`, which implements an agent that follows a hardcoded optimal strategy.
+- `<path-to-nando-model.pth>`, which loads a NandoDQL trained model from a file (`play` mode only).
+
+Nando DQL agent is implemented with a neural network comprising a 9-neuron input layer (linear activation) followed by a 18-neuron hidden layer (ReLu activation), and a 9-neuron output layer (linear activation). The 9 neurons of the input and output layers represent, respectively, the state of the nine cells of the tic-tac-toe board, and the nine possible actions a player can take. 
+
+Nando is implemented in Python, using PyTorch.
 
 **1. Training mode:**
 
