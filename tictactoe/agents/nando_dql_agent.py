@@ -3,7 +3,7 @@ import random
 from collections import deque
 from dataclasses import dataclass
 from pprint import pprint
-from typing import Deque, List, Tuple
+from typing import List, Tuple
 
 import numpy as np
 import torch
@@ -29,16 +29,30 @@ class Memory:
         # Initialize deque with maximum size
         self.memory = deque(maxlen=self.max_size)
 
-    def add(self, state: np.ndarray, move: int, reward: float, next_state: np.ndarray, done: bool) -> None:
+    def add(
+        self,
+        state: np.ndarray,
+        move: int,
+        reward: float,
+        next_state: np.ndarray,
+        done: bool,
+    ) -> None:
         """Add a new experience to memory."""
         self.memory.append((state, move, reward, next_state, done))
 
-    def sample(self, batch_size: int) -> Tuple[np.ndarray, np.ndarray, np.ndarray, np.ndarray, np.ndarray]:
+    def sample(
+        self, batch_size: int
+    ) -> Tuple[np.ndarray, np.ndarray, np.ndarray, np.ndarray, np.ndarray]:
         """Sample a batch of experiences from memory."""
         batch = random.sample(self.memory, batch_size)
         states, moves, rewards, next_states, dones = zip(*batch)
-        return (np.array(states), np.array(moves), np.array(rewards),
-                np.array(next_states), np.array(dones))
+        return (
+            np.array(states),
+            np.array(moves),
+            np.array(rewards),
+            np.array(next_states),
+            np.array(dones),
+        )
 
     def __len__(self) -> int:
         """Return the current size of internal memory."""
@@ -48,6 +62,7 @@ class Memory:
 @dataclass
 class QLearningConfig:
     """Configuration parameters for the Q-learning algorithm."""
+
     epochs: int = 2500
     gamma: float = 0.95  # Discount factor
     epsilon_start: float = 1.0  # Starting value of epsilon
@@ -82,14 +97,14 @@ class NandoDQLAgent(nn.Module):
             nn.ReLU(),
             nn.Linear(64, 32),
             nn.ReLU(),
-            nn.Linear(32, move_size)
+            nn.Linear(32, move_size),
         )
         self.target_model = nn.Sequential(
             nn.Linear(state_size, 64),
             nn.ReLU(),
             nn.Linear(64, 32),
             nn.ReLU(),
-            nn.Linear(32, move_size)
+            nn.Linear(32, move_size),
         )
         self.optimizer = optim.Adam(self.model.parameters(), lr=config.learning_rate)
         self.loss_fn = nn.MSELoss()
@@ -132,9 +147,11 @@ class NandoDQLAgent(nn.Module):
         """Train the model using randomly sampled experiences from memory."""
         if len(self.memory) < self.config.batch_size:
             return 0.0
-        
+
         # Sample batch of experiences
-        states, moves, rewards, next_states, dones = self.memory.sample(self.config.batch_size)
+        states, moves, rewards, next_states, dones = self.memory.sample(
+            self.config.batch_size
+        )
 
         # Convert to PyTorch tensors
         states = torch.FloatTensor(states)
@@ -166,14 +183,12 @@ class NandoDQLAgent(nn.Module):
 
         return loss.item()
 
-    def train(self, adversary: 'Agent', output_file: str) -> List[float]:
+    def train(self, adversary: "Agent", output_file: str) -> List[float]:
         """Train the DQLAgent against another agent for a given number of epochs."""
         print(f"Training for {self.config.epochs} epochs")
         total_reward = 0
         reward_log = []
         loss_log = []
-
-        update_target_every = 10  # Update the target network every 10 epochs
 
         for e in range(self.config.epochs):
             print(f"\n===== EPOCH {e} =====")
@@ -234,7 +249,7 @@ class NandoDQLAgent(nn.Module):
 
             # Train the agent with experience replay
             loss = self.replay()
-            loss_log.append(loss) 
+            loss_log.append(loss)
 
             # Update target network periodically
             if e % self.config.target_update_frequency == 0:

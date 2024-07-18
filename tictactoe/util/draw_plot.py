@@ -18,16 +18,16 @@ class DrawPlot:
         fig, ax1 = plt.subplots()
 
         # Plot reward
-        ax1.set_xlabel('Games')
-        ax1.set_ylabel('Reward', color='tab:blue')
-        ax1.plot(reward_log, color='tab:blue')
-        ax1.tick_params(axis='y', labelcolor='tab:blue')
+        ax1.set_xlabel("Games")
+        ax1.set_ylabel("Reward", color="tab:blue")
+        ax1.plot(reward_log, color="tab:blue")
+        ax1.tick_params(axis="y", labelcolor="tab:blue")
 
         # Create a second y-axis for loss
         ax2 = ax1.twinx()
-        ax2.set_ylabel('Loss', color='tab:red')
-        ax2.plot(loss_log, color='tab:red')
-        ax2.tick_params(axis='y', labelcolor='tab:red')
+        ax2.set_ylabel("Loss", color="tab:red")
+        ax2.plot(loss_log, color="tab:red")
+        ax2.tick_params(axis="y", labelcolor="tab:red")
 
         # Set title and display the plot
         plt.title(self.title)

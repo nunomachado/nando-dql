@@ -9,8 +9,8 @@ from tictactoe.agents.human_agent import HumanAgent
 from tictactoe.agents.mr_miyagi_agent import MrMiyagiAgent
 from tictactoe.agents.nando_dql_agent import NandoDQLAgent, QLearningConfig
 from tictactoe.agents.random_agent import RandomAgent
-from tictactoe.game.game_main import GameMain
 from tictactoe.game.board import Seed
+from tictactoe.game.game_main import GameMain
 from tictactoe.util.draw_plot import DrawPlot
 
 output_file = None

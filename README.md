@@ -37,7 +37,7 @@ The types of opponent agents currently supported are:
 - `basic`, which implements an agent that attempts to play obvious moves if possible or random ones otherwise.
 - `random` which implements an agent that makes random moves.
 - `mrmiyagi`, which implements an agent that follows a hardcoded optimal strategy.
-- `<path-to-nando-model.pth>`, which loads a NandoDQL trained model from a file (`play` mode only).
+- `<path-to-nando-model.pth>`, which loads a NandoDQL trained model from a file.
 
 Nando DQL agent is implemented with a neural network comprising a 9-neuron input layer, followed by two hidden layers (the first with 64 neurons and the second with 32 neurons, both using ReLU activation), and a 9-neuron output layer with linear activation. The 9 neurons of the input layer represent the state of the nine cells of the tic-tac-toe board, while the 9 neurons of the output layer correspond to the nine possible actions a player can take. 
 
@@ -51,20 +51,18 @@ python tictactoe/main.py train [options]
 
 Options include:
 
--o <path-output-file> save the neural network to be trained to a file. (optional)
+- `-o <path-output-file>` save the neural network to be trained to a file. (optional, default = 'models/nando_dql_agent_o=<opponent>_g=<num-games>.pth')
+- `-p <opponent>` pick the type of agent against which the DQL agent's neural network will be trained. Types of agents include: human, basic, random, and mrmiyagi. (required)
+- `-g <num-games>` duration of the training in number of games played. (optional, default = 2500)
 
--p <opponent> pick the type of agent against which the DQL agent's neural network will be trained. Types of agents include: human, basic, random, and mrmiyagi. (required)
-
--g <num-games> duration of the training in number of games played. (optional, default = 2500)
-
-Example: `python tictactoe/main.py train -p basic -g 100` (trains a Nando DQL agent by playing 100 games against a basic agent)
+Example: `python tictactoe/main.py train -p basic -g 100` trains a Nando DQL agent by playing 100 games against a basic agent.
 
 ### Play Mode
 
 ```bash
 python tictactoe/main.py play <player-X> <player-O> -g <num-games>
 ```
-Example: `python tictactoe/main.py play models/nando_dql_agent.pth human -r 5 (allow a human to play 5 tic-tac-toe games against the Nando DQL agent stored in file 'models/nando_dql_agent.pth')`
+Example: `python tictactoe/main.py play models/nando_dql_agent.pth human -r 5` allows a human to play 5 tic-tac-toe games against the Nando DQL agent stored in file 'models/nando_dql_agent.pth'.
 
 ## Development
 
