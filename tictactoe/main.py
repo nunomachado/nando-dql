@@ -1,5 +1,6 @@
 import os
 import sys
+import traceback
 
 sys.path.append(".")
 
@@ -9,6 +10,7 @@ from tictactoe.agents.mr_miyagi_agent import MrMiyagiAgent
 from tictactoe.agents.nando_dql_agent import NandoDQLAgent, QLearningConfig
 from tictactoe.agents.random_agent import RandomAgent
 from tictactoe.game.game_main import GameMain
+from tictactoe.game.board import Seed
 from tictactoe.util.draw_plot import DrawPlot
 
 output_file = None
@@ -32,6 +34,7 @@ def main(args):
             raise ValueError("Invalid mode. Use 'train' or 'play'.")
     except Exception as e:
         print(f"Error: {str(e)}")
+        traceback.print_exc()
         print_usage()
 
 
@@ -50,14 +53,14 @@ def train_mode(args):
 
     config = QLearningConfig(epochs=num_games)
     agent_x = NandoDQLAgent(9, 9, config)
-    agent_o = parse_agent(opponent)
+    agent_o = parse_agent(opponent, Seed.NOUGHT)
 
-    reward_log = agent_x.train(agent_o, output_file)
+    reward_log, loss_log = agent_x.train(agent_o, output_file)
 
     plot = DrawPlot(
         f"Nando DQL Agent Training against {opponent} for {num_games} games"
     )
-    plot.draw_reward_plot(reward_log)
+    plot.draw_train_plot(reward_log, loss_log)
 
 
 def play_mode(args):
@@ -66,8 +69,8 @@ def play_mode(args):
             "Play mode requires at least two arguments: <player-X> <player-O>"
         )
 
-    agent_x = parse_agent(args[0])
-    agent_o = parse_agent(args[1])
+    agent_x = parse_agent(args[0], Seed.CROSS)
+    agent_o = parse_agent(args[1], Seed.NOUGHT)
 
     if len(args) > 2 and args[2] == "-g":
         if len(args) < 4:
@@ -110,7 +113,7 @@ def parse_train_params(args):
         i += 1
 
 
-def parse_agent(parameter):
+def parse_agent(parameter, seed: Seed):
     if parameter == "basic":
         return BasicAgent()
     elif parameter == "human":
@@ -118,7 +121,7 @@ def parse_agent(parameter):
     elif parameter == "random":
         return RandomAgent()
     elif parameter == "mrmiyagi":
-        return MrMiyagiAgent()
+        return MrMiyagiAgent(seed, 1)
     elif os.path.exists(parameter):
         return NandoDQLAgent.create_agent(parameter)
     else:
